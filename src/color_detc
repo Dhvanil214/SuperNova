@@ -1,0 +1,63 @@
+import cv2
+import numpy as np
+from picamera2 import Picamera2
+
+# Initialize PiCamera2
+picam2 = Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888'}))
+picam2.start()
+
+# Function to detect rectangles by color and size
+def detect_colored_rectangles(frame, lower_bound, upper_bound, color_name):
+    # Convert image to HSV (hue, saturation, value) color space
+    hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    
+    # Create mask for the given color
+    mask = cv2.inRange(hsv_frame, lower_bound, upper_bound)
+    
+    # Find contours in the masked image
+    contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    for contour in contours:
+        # Approximate contour to a polygon
+        approx = cv2.approxPolyDP(contour, 0.02 * cv2.arcLength(contour, True), True)
+
+        # Check if the contour has 4 sides (i.e., it's a rectangle)
+        if len(approx) == 4:
+            # Get bounding box and calculate size
+            x, y, w, h = cv2.boundingRect(approx)
+            
+            # Convert pixel size to cm (assuming calibration or reference is done)
+            if 45 <= w <= 55 and 95 <= h <= 105:  # Check if the size is roughly 5x10 cm
+                # Draw the rectangle
+                cv2.drawContours(frame, [approx], 0, (0, 255, 0), 5)
+                # Label the rectangle
+                cv2.putText(frame, f'{color_name} Rectangle', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
+    
+    return frame
+
+# Define color boundaries for red and green in HSV
+lower_red = np.array([0, 50, 50])
+upper_red = np.array([10, 255, 255])
+
+lower_green = np.array([40, 50, 50])
+upper_green = np.array([80, 255, 255])
+
+# Main loop for processing the camera feed
+while True:
+    frame = picam2.capture_array()
+
+    # Detect red and green rectangles
+    frame_with_red_rect = detect_colored_rectangles(frame, lower_red, upper_red, "Red")
+    frame_with_green_rect = detect_colored_rectangles(frame_with_red_rect, lower_green, upper_green, "Green")
+
+    # Display the result
+    cv2.imshow("Rectangle Detection", frame_with_green_rect)
+
+    # Exit on pressing 'q'
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Cleanup
+picam2.stop()
+cv2.destroyAllWindows()
