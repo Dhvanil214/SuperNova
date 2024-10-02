@@ -5,7 +5,7 @@ Engineering materials
 
 We are the members of team Supernova. We are a part of the Robotronics Club of Ahmedabad dedicated to supporting and nurturing the growth of future innovators and leaders. We have a well-equipped engineering room supported by experienced teachers and mentors. With strong focus on STEM education, allowing us to push the boundaries of robotic innovation. Together having different skillsets, we have been able to put together this robot for the WRO competition.
 
-##ABOUT THE TEAM
+## ABOUT THE TEAM
 
 [Kreneal Shah - Grade 12]
  As the teams most experienced member, Kreneal brings strong leadership and extensive experience in robotics he has been fascinated with robots since a young age. He has competed in several WRO’s. He has created and patented the Robomarine an underwater ROV.
