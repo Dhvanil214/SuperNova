@@ -15,7 +15,8 @@ We are the members of team Supernova. We are a part of the Robotronics Club of A
  Nisheel may be the youngest, but brings fresh ideas and enthusiasm. Specializing in electronics and sensor integration, he manages the teams GitHub repository. He too has participated in various robotics competitions, emerging victorious , bringing about the team spirit.
 
 
-## How to prepare the repo based on the template
+ENGINEERING PROCESSES
+====
 
 _Remove this section before the first commit to the repository_
 
