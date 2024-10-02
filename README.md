@@ -17,6 +17,7 @@ We are the members of team Supernova. We are a part of the Robotronics Club of A
 
 ENGINEERING PROCESSES
 ====
+## Processes and Electricals
 
 _Remove this section before the first commit to the repository_
 
