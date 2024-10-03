@@ -49,6 +49,24 @@ ELECTRICAL COMPONENTS
 
 •	Raspberry Pi Camera V2
 
+## EV3 Chassis
+The EV3 chassis is a modular and sturdy framework designed primarily for use in robotics projects. It is part of the LEGO Mindstorms series, which allows for versatile construction and easy reconfiguration. The chassis can be fitted with multiple components, such as motors and sensors, to suit specific tasks. Its lightweight yet robust design makes it an ideal base for mobile robots, providing both stability and flexibility. The ability to easily attach or detach parts allows for quick modifications, which is particularly useful during testing and development phases.
+
+## VL53L1X Distance Sensors
+The VL53L1X is a time-of-flight laser-ranging sensor that measures the distance between the sensor and an object. Unlike traditional infrared sensors, the VL53L1X uses laser pulses to measure distances with high accuracy over a long range, even in low-light conditions. This sensor is crucial for wall-following, as it can sense distances up to 4 meters. It provides reliable distance data to the robot’s controller, allowing for smooth navigation and precise adjustments in tight spaces. Additionally, its compact size makes it easy to integrate into small or complex designs without taking up much space. 
+
+## Raspberry Pi 4
+The Raspberry Pi 4 is a powerful and versatile single-board computer (SBC) that serves as the brain of our robot. It is equipped with a quad-core ARM Cortex-A72 processor, 4 GB of RAM, and multiple USB and GPIO ports, making it capable of handling complex tasks such as image processing, sensor fusion, and motor control. In your robot, the Raspberry Pi 4 processes the data from the VL53L1X sensors and the Raspberry Pi Camera V2, making real-time decisions about movement and obstacle avoidance. Its ability to run full-fledged operating systems like Raspberry Pi OS allows for easy programming and integration of various libraries for computer vision and robotics applications.
+
+## Raspberry Pi Camera V2
+The Raspberry Pi Camera V2 is a high-resolution camera module that provides the robot with the ability to see and interpret its surroundings. Featuring an 8-megapixel sensor, it captures high-quality images that the Raspberry Pi can use for color detection and object recognition. In our setup, the camera is crucial for detecting red and green obstacles, which guide the robot’s turns. The camera supports video capture at 1080p, allowing for real-time image processing and analysis. Its compact design ensures that it can be easily mounted on the robot without adding significant weight or bulk.
+
+## 7.4 V Battery
+The 7.4 V rechargeable battery is the primary power source for the robot, providing energy to the motors, sensors, and computing components. This type of battery is commonly used in robotics due to its balance between power output and portability. In your robot, the 7.4 V battery ensures stable operation throughout the competition, powering not only the Raspberry Pi and sensor systems but also the motors responsible for movement and steering. With a robust capacity, the battery can sustain the robot for extended periods, reducing the need for frequent recharging.
+
+## ESP32
+The ESP32 driver board is a general-purpose motor driver that acts as an interface between the Raspberry Pi and the motors. It ensures that signals from the Raspberry Pi are correctly interpreted to control the motors' speed and direction. The ESP32 microcontroller on the board is known for its Wi-Fi and Bluetooth capabilities, although in this setup, it primarily serves to manage communication between the robot's sensors, motors, and control systems. The board also offers PWM (Pulse Width Modulation) control, which allows for smooth acceleration and deceleration of the motors, providing the robot with precise movement control. Additionally, the ESP32’s low power consumption ensures that the robot can run efficiently without draining the battery too quickly.
+
 
 
 
