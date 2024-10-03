@@ -95,4 +95,26 @@ Sensor Installation: Mount the two VL53L1X sensors at the front of the chassis, 
 
 Camera and Servo Installation: Attach the Raspberry Pi Camera V2 to the front of the robot for obstacle detection. Install the servo motor to control the front axle for steering..
 
+POWER AND SENSE MANAGEMENT
+====
 
+Our robot is powered by a 7.2V battery, which is selected to ensure stable and long-lasting performance throughout the competition. This power source is critical to running the EV3 motor, the servo motor for steering, and the three VL53L1X laser sensors. The battery can power the robot for more than sufficient operational time for multiple challenge rounds without requiring recharging.
+
+## Sensor Management
+The robot uses three VL53L1X laser sensors to accurately detect and measure distances during wall-following. Two of these sensors are mounted on the sides of the chassis to track distances to the nearest walls, while the third is placed at the front to monitor the distance from the wall directly ahead. These sensors allow the robot to maintain a precise distance from the inner, outer, and front walls, which is crucial for ensuring smooth and consistent navigation.
+
+## Initial Readings and Wall Following
+At the beginning of each round, the side-mounted VL53L1X sensors take initial distance measurements from the surrounding walls. These values guide the robot's wall-following behavior. As the robot moves, it continuously compares the current sensor readings with the initial measurements. When the robot detects a significant difference in these readings (i.e., the inner wall has ended), it triggers a turn in the direction of the sensor with the largest discrepancy.
+
+## Final Stage and Path Completion 
+As the robot continues following the inner wall, it takes turns based on sensor feedback whenever it detects the end of the wall. After the 12th turn, the robot switches to a new phase where it wall-follows for half a meter (0.5 m), ensuring that the task ends in the same straightforward section where it started. The sensor management ensures that each turn and distance measurement is carefully monitored, allowing the robot to complete the course accurately.
+
+## Wiring and Sensor Integration
+The wiring diagram for the sensors and motors is designed to minimize signal interference and ensure reliable data transmission. Each VL53L1X sensor is connected via I2C communication to the General Driver Board for ESP32, which processes the distance readings in real-time. The servo motor and the EV3 motor both receive power through dedicated lines from the battery which is connected to the General Driver Board, with wiring paths carefully organized to avoid any crosstalk between power and signal lines.
+
+We included a detailed wiring diagram below, which shows the connections between the sensors, motors, and power source. The diagram also includes labels for each component, making it easier to replicate the setup.
+
+SCHEMATIC
+
+While we believe that the task could be accomplished effectively using only two sensors, incorporating a third sensor offers several advantages. Not only does it make the overall process more efficient, but it also simplifies navigation, allowing the robot to react more quickly to environmental changes. By using three sensors, the robot can save valuable time during the task, resulting in smoother and more precise performance.
+These sensors are carefully positioned to ensure they can accurately detect nearby walls without interfering with the robot’s mobility. This strategic placement strikes a balance between optimal functionality and preventing any disruptions during movement
