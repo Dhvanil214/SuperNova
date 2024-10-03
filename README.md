@@ -113,7 +113,7 @@ The wiring diagram for the sensors and motors is designed to minimize signal int
 
 We included a detailed wiring diagram below, which shows the connections between the sensors, motors, and power source. The diagram also includes labels for each component, making it easier to replicate the setup.
 
-![Screenshot (6)](https://github.com/user-attachments/assets/63230813-f404-4067-866b-89f585c5ec13)
+![Screenshot (8)](https://github.com/user-attachments/assets/73c3f905-090d-4082-87e4-458f547aa2c0)
 
 
 While we believe that the task could be accomplished effectively using only two sensors, incorporating a third sensor offers several advantages. Not only does it make the overall process more efficient, but it also simplifies navigation, allowing the robot to react more quickly to environmental changes. By using three sensors, the robot can save valuable time during the task, resulting in smoother and more precise performance.
