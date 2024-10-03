@@ -14,7 +14,6 @@ We are the members of team Supernova. We are a part of the Robotronics Club of A
 [Nisheel Patel - Grade 9] 
  Nisheel may be the youngest, but brings fresh ideas and enthusiasm. Specializing in electronics and sensor integration, he manages the teams GitHub repository. He too has participated in various robotics competitions, emerging victorious , bringing about the team spirit.
 
-
 ENGINEERING PROCESSES
 ====
 ## Processes and Electricals
@@ -114,7 +113,8 @@ The wiring diagram for the sensors and motors is designed to minimize signal int
 
 We included a detailed wiring diagram below, which shows the connections between the sensors, motors, and power source. The diagram also includes labels for each component, making it easier to replicate the setup.
 
-SCHEMATIC
+![Screenshot (6)](https://github.com/user-attachments/assets/63230813-f404-4067-866b-89f585c5ec13)
+
 
 While we believe that the task could be accomplished effectively using only two sensors, incorporating a third sensor offers several advantages. Not only does it make the overall process more efficient, but it also simplifies navigation, allowing the robot to react more quickly to environmental changes. By using three sensors, the robot can save valuable time during the task, resulting in smoother and more precise performance.
 These sensors are carefully positioned to ensure they can accurately detect nearby walls without interfering with the robot’s mobility. This strategic placement strikes a balance between optimal functionality and preventing any disruptions during movement
