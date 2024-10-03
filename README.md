@@ -36,12 +36,19 @@ It will make it a strong and flexible robot which is able to perform complex act
 ELECTRICAL COMPONENTS
 ====
 •	EV3 Chassis
+
 •	ESP32
+
 •	Raspberry Pi4
+
 •	Vl53l1x (ToF) Sensor
+
 •	TB6612FNG Motor Driver
+
 •	7.4V Battery
+
 •	Raspberry Pi Camera V2
-•	7.4 V Battery
+
+
 
 
