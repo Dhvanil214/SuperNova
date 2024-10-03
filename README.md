@@ -71,26 +71,20 @@ MOBILITY MANAGEMENT:
 ====
 
 Due to the unreliability of our initial 3D-printed design, we transitioned to a more robust and customizable approach by utilizing Lego components. The Lego Technic chassis provided an ideal foundation due to its flexibility and durability, allowing us to fine-tune our robot’s design based on evolving requirements.
-
-
-                                                                               (1st Iteration)
-Core Design
+                                                                            
+## Core Design
 The core of the robot’s movement is driven by an EV3 motor connected to a system of gears and a differential. This setup ensures smooth and controlled turns, crucial for maintaining stability during sharp maneuvers. The differential plays a key role in preventing tire slipping when the robot navigates tight turns, allowing for precise and consistent movements. We implemented a two-gear system to prioritize speed over torque, as the robot is required to traverse at least fourteen meters within a short period. The gearing ratio was chosen specifically to enhance speed without compromising stability, based on the demands of the competition.
 
-Sensor Placement and Functionality
+## Sensor Placement and Functionality
 The robot is equipped with two VL53L1X laser sensors, placed at the front of the chassis to handle the wall-following aspect of the task. This strategic placement allows the robot to make sharp turns as soon as the sensors detect a wall, ensuring quick and efficient navigation. Additionally, a third VL53L1X sensor is mounted at the front to measure the distance from the wall directly ahead, further improving precision when navigating along straight paths. The Raspberry Pi Camera V2 adds another layer of sensing by detecting obstacles marked in red or green, enhancing the robot's ability to identify and avoid objects effectively.
 
-
-
-Steering Mechanism
+## Steering Mechanism
 The steering mechanism is controlled by a servo motor, which allows for real-time adjustments to the robot’s direction. This motor is connected to the front axle, enabling smooth and responsive steering. The servo motor’s accuracy ensures that the robot maintains its intended course, especially during sharp turns or when avoiding obstacles.
 
-
-Power Supply
+## Power Supply
 The entire system is powered by a 7.4V battery, providing sufficient energy to sustain the robot’s operations for approximately 60 minutes. This battery life ensures that the robot can complete multiple rounds of the challenge without needing frequent recharging, offering reliable performance throughout the competition.
 
-
-Assembly Instructions:
+## Assembly Instructions:
 Chassis Construction: Build any Lego Technic chassis as per your choice. Ensure that the beams are aligned to offer a sturdy base for mounting motors and sensors.
 Motor Mounting: Attach the EV3 motor to the chassis (You will have to modify the cable).
 Gear Assembly: Connect the two gears to the EV3 motor to achieve the 1:1 speed-to-torque ratio. Attach the differential to the front axle for smoother turning.
