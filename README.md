@@ -86,9 +86,13 @@ The entire system is powered by a 7.4V battery, providing sufficient energy to s
 
 ## Assembly Instructions:
 Chassis Construction: Build any Lego Technic chassis as per your choice. Ensure that the beams are aligned to offer a sturdy base for mounting motors and sensors.
+
 Motor Mounting: Attach the EV3 motor to the chassis (You will have to modify the cable).
+
 Gear Assembly: Connect the two gears to the EV3 motor to achieve the 1:1 speed-to-torque ratio. Attach the differential to the front axle for smoother turning.
+
 Sensor Installation: Mount the two VL53L1X sensors at the front of the chassis, ensuring they are angled appropriately for accurate wall detection. The third sensor should be placed facing forward to monitor the distance to walls.
+
 Camera and Servo Installation: Attach the Raspberry Pi Camera V2 to the front of the robot for obstacle detection. Install the servo motor to control the front axle for steering..
 
 
