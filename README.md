@@ -33,3 +33,15 @@ The system integrations allow this robot to independently operate by way of comb
 
 It will make it a strong and flexible robot which is able to perform complex actions of various types through this hardware control and high-level processing. Such kinds of robots can very well change and adapt to its surroundings, wether it is navigating an obstacle course, or detecting objects crossing its pathway. In all aspects, the design ensures the smooth functioning of all components leads maximum efficiency and functionality for smooth and self-directed running.
 
+ELECTRICAL COMPONENTS
+====
+•	EV3 Chassis
+•	ESP32
+•	Raspberry Pi4
+•	Vl53l1x (ToF) Sensor
+•	TB6612FNG Motor Driver
+•	7.4V Battery
+•	Raspberry Pi Camera V2
+•	7.4 V Battery
+
+
