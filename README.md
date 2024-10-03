@@ -118,3 +118,23 @@ We included a detailed wiring diagram below, which shows the connections between
 
 While we believe that the task could be accomplished effectively using only two sensors, incorporating a third sensor offers several advantages. Not only does it make the overall process more efficient, but it also simplifies navigation, allowing the robot to react more quickly to environmental changes. By using three sensors, the robot can save valuable time during the task, resulting in smoother and more precise performance.
 These sensors are carefully positioned to ensure they can accurately detect nearby walls without interfering with the robot’s mobility. This strategic placement strikes a balance between optimal functionality and preventing any disruptions during movement
+
+Obstacle Management
+====
+In designing our robot's obstacle management system, we implemented a multi-sensor strategy that allows the robot to seamlessly navigate various challenges while prioritizing efficiency and accuracy. The robot uses a combination of color detection via a Raspberry Pi Camera V2 and distance measurement using VL53L1X laser sensors to respond to obstacles in real-time. Our approach integrates advanced sensor fusion, allowing the robot to make intelligent decisions, avoid collisions, and stay on course.
+
+## Obstacle Detection Strategy
+1.	Color-Based Obstacle Handling:
+o	The Raspberry Pi Camera V2 plays a crucial role in detecting colored obstacles. The camera is programmed to identify red and green blocks that are placed throughout the course.
+o	When a red block is detected, the robot is programmed to make a right turn to avoid the obstacle.
+o	Conversely, when a green block is detected, the robot makes a left turn to follow the path indicated by the green marker.
+o	This logic ensures the robot reacts appropriately to different visual cues while keeping its movement smooth and controlled.
+2.	Distance-Based Obstacle Avoidance:
+o	In addition to color detection, the robot continuously measures its distance from surrounding walls using VL53L1X laser sensors mounted on the sides. These sensors allow the robot to maintain a safe distance from obstacles and walls by adjusting its course as needed.
+o	The sensors provide real-time feedback on the robot’s proximity to walls, enabling the robot to adjust its path quickly if it gets too close. This is particularly useful when the robot needs to take a sharp turn or when walls are irregularly shaped.
+3.	Obstacle and Turn Management Integration:
+o	Once an obstacle is detected and a turn is initiated, the robot stores the direction of each turn in memory. This turn-tracking mechanism ensures that after completing 12 turns, the robot resets its turn loop and begins wall-following for an additional half-meter. This ensures that the robot completes the task in the same straightforward section in which it started.
+
+## Flow Diagram
+This is a flow diagram representing the robot’s obstacle detection and management strategy:
+![FE_24_ObstacleManagement](https://github.com/user-attachments/assets/76c79ec3-035e-489a-8110-110a15f57cf7)
