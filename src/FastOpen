@@ -1,0 +1,309 @@
+#include <HardwareSerial.h>
+
+#define S_RXD 18
+#define S_TXD 19
+#define I2C_SCL 33
+#define I2C_SDA 32
+
+#include <Wire.h>
+#include <SparkFun_VL53L1X.h>
+#include <SCServo.h>
+#define TCAADDR 0x70 // I2C address of TCA9548A
+
+SFEVL53L1X distanceSensor;
+SCSCL sc;
+int dirturn=580;
+const uint16_t PWMA = 25;         
+const uint16_t AIN2 = 17;        
+const uint16_t AIN1 = 21;         
+const uint16_t ANALOG_WRITE_BITS = 8;
+int turns = 0;
+int freq = 5000;
+int channel_A = 0;
+int resolution = ANALOG_WRITE_BITS;
+uint16_t LeftS;
+uint16_t RightS;
+
+const int greenLEDPin = 5;  // Green LED on GPIO 5
+const int buttonPin = 4;    // Push button on GPIO 16
+
+// Control parameters
+uint16_t idealDistanceFromWall =0;  // Ideal distance from the wall in mm
+const int maxTurnAngle = 30;  // Maximum turning angle for the servo motor in degrees
+
+// PID parameters
+float kp = 0.65;  // Proportional gain
+float ki = 0.0;  // Integral gain
+float kd = 0.1;  // Derivative gain
+
+float previousError = 0;
+float integral = 0;
+float dt = 0.05;  // Time step (50ms loop delay)
+
+void tcaSelect(uint8_t i) {
+  if (i > 7) return;
+
+  Wire.beginTransmission(TCAADDR);
+  Wire.write(1 << i); // Select the TCA channel
+  Wire.endTransmission();
+}
+
+// Function to control the steering based on the distance from the wall using PID
+void controlSteeringWithPID(int16_t distance) {
+  if (distance == -1) return;  // No valid reading, keep going straight
+ 
+  float error = distance - idealDistanceFromWall; // Calculate error
+  float Pout = kp * error; // Proportional term
+
+  integral += error * dt; // Integral term
+  float Iout = ki * integral;
+
+  float derivative = (error - previousError) / dt; // Derivative term
+  float Dout = kd * derivative;
+  
+  float output = Pout + Iout + Dout; // PID output
+  previousError = error; // Update previous error
+
+  int turnAngle = map(output, -100, 100, -maxTurnAngle, maxTurnAngle); // Map output to steering angle
+  turnAngle = constrain(turnAngle, -maxTurnAngle, maxTurnAngle); // Constrain angle
+
+  int servoAngle = 500 + turnAngle; // Set servo angle
+  
+  sc.WritePos(1, servoAngle, 0, 2500); // Set steering
+  
+  // Debugging output
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.print(" mm, Turn angle: ");
+  Serial.println(turnAngle);
+  Serial.println(servoAngle);
+}
+void controlSteeringWithPIDR(int16_t distance) {
+  if (distance == -1) return;  // No valid reading, keep going straight
+ 
+  float error = distance - idealDistanceFromWall; // Calculate error
+  float Pout = kp * error; // Proportional term
+
+  integral += error * dt; // Integral term
+  float Iout = ki * integral;
+
+  float derivative = (error - previousError) / dt; // Derivative term
+  float Dout = kd * derivative;
+  
+  float output = Pout + Iout + Dout; // PID output
+  previousError = error; // Update previous error
+
+  int turnAngle = map(output, -100, 100, -maxTurnAngle, maxTurnAngle); // Map output to steering angle
+  turnAngle = constrain(turnAngle, -maxTurnAngle, maxTurnAngle); // Constrain angle
+
+  int servoAngle = 500 - turnAngle; // Set servo angle
+  
+  sc.WritePos(1, servoAngle, 0, 2500); // Set steering
+  
+  // Debugging output
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.print(" mm, Turn angle: ");
+  Serial.println(turnAngle);
+  Serial.println(servoAngle);
+}
+
+void initMotors() {
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+  pinMode(PWMA, OUTPUT);
+  ledcAttachChannel(PWMA, freq, resolution, channel_A);
+}
+
+void forwardA(uint16_t pwm) {
+  digitalWrite(AIN1, HIGH);
+  digitalWrite(AIN2, LOW);
+  ledcWrite(PWMA, pwm);
+}
+
+void stopA() {
+  digitalWrite(AIN1, LOW);
+  digitalWrite(AIN2, LOW);
+  ledcWrite(PWMA, 0);
+}
+
+void setup() {
+  Wire.begin(I2C_SDA, I2C_SCL);
+  Serial.begin(115200);
+  pinMode(greenLEDPin, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
+  while (!Serial) {
+    ;  // wait for serial port to connect
+  }
+  while (digitalRead(buttonPin) == HIGH) {
+    // Do nothing, just wait for the button to be pressed
+    delay(100); // A short delay to prevent bouncing issues
+  }
+  tcaSelect(5);
+  if (distanceSensor.begin() != 0) {
+    Serial.println("Sensor 3 (channel 5) not found.");
+  } else {
+    Serial.println("Sensor 3 (channel 5) found and initialized.");
+    distanceSensor.setDistanceModeLong();  // Set to long-range mode
+    distanceSensor.setTimingBudgetInMs(50);  // Short timing budget for faster reads
+    distanceSensor.startRanging();
+  }
+  
+  
+  // Select TCA9548A channel 7 (sensor 2)
+  tcaSelect(7);
+  if (distanceSensor.begin() != 0) {
+    Serial.println("Sensor 2 (channel 7) not found.");
+  } else {
+    Serial.println("Sensor 2 (channel 7) found and initialized.");
+    distanceSensor.setDistanceModeLong();
+    distanceSensor.setTimingBudgetInMs(50);
+    distanceSensor.startRanging();
+  }
+
+  Serial1.begin(1000000, SERIAL_8N1, S_RXD, S_TXD);
+  sc.pSerial = &Serial1;
+  delay(1000);
+  
+  initMotors();
+  sc.WritePos(1, 500, 0, 1000); // Set steering to zero
+  delay(200);
+  forwardA(700); // Start robot forward
+
+  // Select and read from sensor 2 (channel 7)
+    tcaSelect(7);
+    distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
+    while (!distanceSensor.checkForDataReady())
+    {
+      delay(1);
+    }
+    uint16_t distance2 = distanceSensor.getDistance();
+    distanceSensor.clearInterrupt();
+    distanceSensor.stopRanging();
+    Serial.print("Sensor 2 (channel 7) Distance (mm): ");
+    Serial.println(distance2);
+    delay(10);
+
+    tcaSelect(5);
+    distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
+    while (!distanceSensor.checkForDataReady())
+    {
+      delay(1);
+    }
+    uint16_t distance3 = distanceSensor.getDistance();
+    distanceSensor.clearInterrupt();
+    distanceSensor.stopRanging();
+    Serial.print("Sensor 3 (channel 5) Distance (mm): ");
+    Serial.println(distance2);
+    delay(10);
+
+    LeftS = distance2; 
+    RightS = distance3;     // save initial distance
+
+}
+
+void loop() {
+//  int16_t distance = getWallDistance(); // Measure distance from the wall
+// Select and read from sensor 1 (channel 6)
+  while(turns<=11){
+    tcaSelect(5);
+    distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
+    while (!distanceSensor.checkForDataReady())
+    {
+      delay(1);
+    }
+    uint16_t distance3 = distanceSensor.getDistance();
+    distanceSensor.clearInterrupt();
+    distanceSensor.stopRanging();
+    delay(10);
+
+    
+    // Select and read from sensor 2 (channel 7)
+    tcaSelect(7);
+    distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
+    while (!distanceSensor.checkForDataReady())
+    {
+      delay(1);
+    }
+    uint16_t distance2 = distanceSensor.getDistance();
+    distanceSensor.clearInterrupt();
+    distanceSensor.stopRanging();
+    Serial.print("Sensor 2 (channel 7) Distance (mm): ");
+    Serial.println(distance2);
+    delay(10);
+
+    if (turns==0){
+      if((distance2>LeftS+300)||(distance3>RightS+300)){
+        if(distance2>LeftS+300){
+          dirturn=580;
+        }
+        else {
+          dirturn=435;
+        }
+        sc.WritePos(1, dirturn, 0, 1000); // Turning left
+        delay(100);
+        forwardA(900);
+        delay(700);
+        stopA(); // Stop motors
+        sc.WritePos(1, 500, 0, 1000);
+        forwardA(900);
+        delay(700); // Reset steering
+        turns+=1;
+      }
+      else {
+        idealDistanceFromWall = LeftS;
+        controlSteeringWithPID(distance2); // Adjust steering based on distance using PID
+        forwardA(900); // Move the robot forward
+      }
+      
+    }
+    else{
+      idealDistanceFromWall = 230;  // Ideal distance from the wall in mm
+      if(dirturn==580){
+        if (distance2 != -1) {
+          if (distance2 > 750) {
+            sc.WritePos(1, dirturn, 0, 1000); // Turning left
+            delay(100);
+            forwardA(900);
+            delay(750);
+            // Stop motors
+            sc.WritePos(1, 500, 0, 1000);
+            forwardA(900);
+            delay(100); // Reset steering
+            turns+=1;
+          } else {
+            
+            controlSteeringWithPID(distance2); // Adjust steering based on distance using PID
+            forwardA(900); // Move the robot forward
+          }
+        }
+      }
+      else{
+        if (distance3 != -1) {
+          if (distance3 > 750) {
+            sc.WritePos(1, dirturn, 0, 1000); // Turning left
+            delay(100);
+            forwardA(900);
+            delay(675);
+            // Stop motors
+            sc.WritePos(1, 500, 0, 1000); // Reset steering
+            forwardA(900);
+            delay(100); // Reset steering
+            turns+=1;
+          } else {
+            
+            controlSteeringWithPIDR(distance3); // Adjust steering based on distance using PID
+            forwardA(900); // Move the robot forward
+          }
+        }
+      }
+    }  
+  }
+  while(turns==12){
+    sc.WritePos(1, 490, 0, 1000);
+    forwardA(700);
+    delay(200);
+    stopA();
+    turns+=1;
+  }
+}
